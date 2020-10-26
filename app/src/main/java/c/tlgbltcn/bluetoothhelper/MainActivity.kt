@@ -25,15 +25,15 @@ class MainActivity : AppCompatActivity(), BluetoothHelperListener {
                 .setPermissionRequired(true)
                 .create()
 
-        if (bluetoothHelper.isBluetoothEnabled()) enable_disable.text = "Bluetooth State Off"
+        if (bluetoothHelper.isBluetoothEnabled() == true) enable_disable.text = "Bluetooth State Off"
         else enable_disable.text = "Bluetooth State On"
 
-        if (bluetoothHelper.isBluetoothScanning()) start_stop.text = "Stop discovery"
+        if (bluetoothHelper.isBluetoothScanning() == true) start_stop.text = "Stop discovery"
         else start_stop.text = "Start discovery"
 
 
         enable_disable.setOnClickListener {
-            if (bluetoothHelper.isBluetoothEnabled()) {
+            if (bluetoothHelper.isBluetoothEnabled() == true) {
 
                 bluetoothHelper.disableBluetooth()
 
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity(), BluetoothHelperListener {
         }
 
         start_stop.setOnClickListener {
-            if (bluetoothHelper.isBluetoothScanning()) {
+            if (bluetoothHelper.isBluetoothScanning() == true) {
                 bluetoothHelper.stopDiscovery()
 
             } else {

@@ -13,22 +13,17 @@ import android.os.Build
  */
 class BluetoothHelper(private val context: Context, private val listener: BluetoothHelperListener) {
 
-    private val mBluetoothAdapter by lazy {
+    private val bluetoothAdapter by lazy {
         BluetoothAdapter.getDefaultAdapter()?.let {
             return@lazy it
-        } ?: run {
-            throw RuntimeException("Bluetooth is not supported on this hardware platform. " +
-                    "Make sure you try it from the real device\n " +
-                    "You could more information from here:\n" +
-                    "https://developer.android.com/reference/android/bluetooth/BluetoothAdapter")
         }
     }
 
     private var isRequiredPermission = false
 
-    private var isEnabled = mBluetoothAdapter.isEnabled
+    private var isEnabled = bluetoothAdapter?.isEnabled
 
-    private var isDiscovering = mBluetoothAdapter.isDiscovering
+    private var isDiscovering = bluetoothAdapter?.isDiscovering
 
     private val mBluetoothStateChangeReceiver by lazy {
         object : BluetoothStateChangeReceiver() {
@@ -67,11 +62,11 @@ class BluetoothHelper(private val context: Context, private val listener: Blueto
     fun isBluetoothScanning() = isDiscovering
 
     fun enableBluetooth() {
-        if (!isEnabled) mBluetoothAdapter.enable()
+        if (isEnabled == false) bluetoothAdapter?.enable()
     }
 
     fun disableBluetooth() {
-        if (isEnabled) mBluetoothAdapter.disable()
+        if (isEnabled == true) bluetoothAdapter?.disable()
     }
 
     fun registerBluetoothStateChanged() {
@@ -87,16 +82,16 @@ class BluetoothHelper(private val context: Context, private val listener: Blueto
     }
 
     fun startDiscovery() {
-        if (isEnabled && !isDiscovering) {
-            mBluetoothAdapter.startDiscovery()
+        if (isEnabled == true && isDiscovering == false) {
+            bluetoothAdapter?.startDiscovery()
             val discoverDevicesIntent = IntentFilter(BluetoothDevice.ACTION_FOUND)
             context.registerReceiver(mBluetoothDeviceFounderReceiver, discoverDevicesIntent)
         }
     }
 
     fun stopDiscovery() {
-        if (isEnabled && isDiscovering) {
-            mBluetoothAdapter.cancelDiscovery()
+        if (isEnabled == true && isDiscovering == true) {
+            bluetoothAdapter?.cancelDiscovery()
         }
     }
 
