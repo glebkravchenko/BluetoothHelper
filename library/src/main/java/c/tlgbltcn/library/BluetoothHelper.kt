@@ -92,6 +92,7 @@ class BluetoothHelper(private val context: Context, private val listener: Blueto
     fun stopDiscovery() {
         if (isEnabled == true && isDiscovering == true) {
             bluetoothAdapter?.cancelDiscovery()
+            context.unregisterReceiver(mBluetoothDeviceFounderReceiver)
         }
     }
 
